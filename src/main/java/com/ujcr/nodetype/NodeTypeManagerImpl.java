@@ -13,55 +13,58 @@ import javax.jcr.nodetype.NodeTypeManager;
 import javax.jcr.nodetype.NodeTypeTemplate;
 import javax.jcr.nodetype.PropertyDefinitionTemplate;
 
-public class NodeTypeManagerImpl implements NodeTypeManager{
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Service;
 
+
+@Service
+public class NodeTypeManagerImpl implements NodeTypeManager,ApplicationContextAware {
+
+	@Autowired
+	private NodeTypeRepository nodeTypeRepository;
+	private ApplicationContext applicationContext;
+	
+	
 	public NodeType getNodeType(String nodeTypeName) throws NoSuchNodeTypeException, RepositoryException {
-		// TODO Auto-generated method stub
-		return null;
+		return nodeTypeRepository.findByPropertyValue("name", nodeTypeName);
 	}
 
 	public boolean hasNodeType(String name) throws RepositoryException {
-		// TODO Auto-generated method stub
-		return false;
+		return nodeTypeRepository.findByPropertyValue("name", name)!=null;
 	}
 
 	public NodeTypeIterator getAllNodeTypes() throws RepositoryException {
-		// TODO Auto-generated method stub
-		return null;
+		return new NodeTypeIteratorImpl(nodeTypeRepository.findAll().iterator());
 	}
 
 	public NodeTypeIterator getPrimaryNodeTypes() throws RepositoryException {
-		// TODO Auto-generated method stub
-		return null;
+		return new NodeTypeIteratorImpl(nodeTypeRepository.findAllByPropertyValue("mixin", false).iterator());
 	}
 
 	public NodeTypeIterator getMixinNodeTypes() throws RepositoryException {
-		// TODO Auto-generated method stub
-		return null;
+		return new NodeTypeIteratorImpl(nodeTypeRepository.findAllByPropertyValue("mixin", true).iterator());
 	}
 
 	public NodeTypeTemplate createNodeTypeTemplate() throws UnsupportedRepositoryOperationException, RepositoryException {
-		// TODO Auto-generated method stub
-		return null;
+		return new NodeTypeImpl();
 	}
 
 	public NodeTypeTemplate createNodeTypeTemplate(NodeTypeDefinition ntd) throws UnsupportedRepositoryOperationException, RepositoryException {
-		// TODO Auto-generated method stub
-		return null;
+		return new NodeTypeImpl(ntd);
 	}
 
 	public NodeDefinitionTemplate createNodeDefinitionTemplate() throws UnsupportedRepositoryOperationException, RepositoryException {
-		// TODO Auto-generated method stub
-		return null;
+		return new NodeDefinitionTemplateImpl();
 	}
 
 	public PropertyDefinitionTemplate createPropertyDefinitionTemplate() throws UnsupportedRepositoryOperationException, RepositoryException {
-		// TODO Auto-generated method stub
-		return null;
+		return new PropertyDefinitionImpl();
 	}
 
 	public NodeType registerNodeType(NodeTypeDefinition ntd, boolean allowUpdate) throws InvalidNodeTypeDefinitionException, NodeTypeExistsException, UnsupportedRepositoryOperationException, RepositoryException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -72,10 +75,17 @@ public class NodeTypeManagerImpl implements NodeTypeManager{
 
 	public void unregisterNodeType(String name) throws UnsupportedRepositoryOperationException, NoSuchNodeTypeException, RepositoryException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void unregisterNodeTypes(String[] names) throws UnsupportedRepositoryOperationException, NoSuchNodeTypeException, RepositoryException {
 		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext=applicationContext;
 		
-	}}
+	}
+}

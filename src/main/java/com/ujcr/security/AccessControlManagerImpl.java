@@ -11,7 +11,7 @@ import javax.jcr.security.AccessControlPolicyIterator;
 import javax.jcr.security.Privilege;
 import javax.jcr.version.VersionException;
 
-public class AccessControlManagerImpl implements AccessControlManager{
+public class AccessControlManagerImpl implements AccessControlManager {
 
 	public Privilege[] getSupportedPrivileges(String absPath) throws PathNotFoundException, RepositoryException {
 		// TODO Auto-generated method stub
@@ -19,8 +19,7 @@ public class AccessControlManagerImpl implements AccessControlManager{
 	}
 
 	public Privilege privilegeFromName(String privilegeName) throws AccessControlException, RepositoryException {
-		// TODO Auto-generated method stub
-		return null;
+		return PrivilegeFactory.getPrivilege(privilegeName);
 	}
 
 	public boolean hasPrivileges(String absPath, Privilege[] privileges) throws PathNotFoundException, RepositoryException {
@@ -50,10 +49,11 @@ public class AccessControlManagerImpl implements AccessControlManager{
 
 	public void setPolicy(String absPath, AccessControlPolicy policy) throws PathNotFoundException, AccessControlException, AccessDeniedException, LockException, VersionException, RepositoryException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void removePolicy(String absPath, AccessControlPolicy policy) throws PathNotFoundException, AccessControlException, AccessDeniedException, LockException, VersionException, RepositoryException {
 		// TODO Auto-generated method stub
-		
-	}}
+
+	}
+}

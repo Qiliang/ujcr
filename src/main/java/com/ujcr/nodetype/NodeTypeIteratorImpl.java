@@ -1,41 +1,50 @@
 package com.ujcr.nodetype;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.nodetype.NodeTypeIterator;
 
-public class NodeTypeIteratorImpl implements NodeTypeIterator{
+public class NodeTypeIteratorImpl implements NodeTypeIterator {
+
+	private final List<NodeType> nodeTypes = new ArrayList<NodeType>();
+	private int position = 0;
+
+	public NodeTypeIteratorImpl(Iterator<NodeTypeImpl> iterator) {
+		while (iterator.hasNext()) {
+			NodeType nodeTypeImpl = (NodeType) iterator.next();
+			nodeTypes.add(nodeTypeImpl);
+		}
+	}
 
 	public void skip(long skipNum) {
-		// TODO Auto-generated method stub
-		
+		position += skipNum;
 	}
 
 	public long getSize() {
-		// TODO Auto-generated method stub
-		return 0;
+		return nodeTypes.size();
 	}
 
 	public long getPosition() {
-		// TODO Auto-generated method stub
-		return 0;
+		return position;
 	}
 
 	public boolean hasNext() {
-		// TODO Auto-generated method stub
-		return false;
+		return position >= nodeTypes.size();
 	}
 
 	public Object next() {
-		// TODO Auto-generated method stub
-		return null;
+		return nodeTypes.get(position++);
 	}
 
 	public void remove() {
-		// TODO Auto-generated method stub
-		
+		throw new UnsupportedOperationException ();
+
 	}
 
 	public NodeType nextNodeType() {
-		// TODO Auto-generated method stub
-		return null;
-	}}
+		return  nodeTypes.get(position++);
+	}
+}

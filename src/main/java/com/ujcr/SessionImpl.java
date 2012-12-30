@@ -7,6 +7,7 @@ import java.security.AccessControlException;
 
 import javax.jcr.AccessDeniedException;
 import javax.jcr.Credentials;
+import javax.jcr.GuestCredentials;
 import javax.jcr.InvalidItemStateException;
 import javax.jcr.InvalidSerializedDataException;
 import javax.jcr.Item;
@@ -21,6 +22,7 @@ import javax.jcr.ReferentialIntegrityException;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.SimpleCredentials;
 import javax.jcr.UnsupportedRepositoryOperationException;
 import javax.jcr.ValueFactory;
 import javax.jcr.Workspace;
@@ -31,34 +33,60 @@ import javax.jcr.retention.RetentionManager;
 import javax.jcr.security.AccessControlManager;
 import javax.jcr.version.VersionException;
 
+import org.neo4j.kernel.AbstractGraphDatabase;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 
-public class SessionImpl implements Session{
+public class SessionImpl implements Session {
+
+	private final Repository repository;
+	private final String workspaceName;
+	private final Credentials credentials;
+	
+	public SessionImpl(Repository repository, String workspaceName, Credentials credentials) {
+		super();
+		this.repository = repository;
+		this.workspaceName = workspaceName;
+		this.credentials = credentials;
+	}
 
 	public Repository getRepository() {
-		// TODO Auto-generated method stub
-		return null;
+		return repository;
 	}
 
 	public String getUserID() {
-		// TODO Auto-generated method stub
+		if (credentials instanceof SimpleCredentials) {
+			SimpleCredentials simpleCredentials = (SimpleCredentials) credentials;
+			return simpleCredentials.getUserID();
+
+		}else if (credentials instanceof GuestCredentials) {
+			return "anonymous user ID";
+			
+		}
+		
 		return null;
 	}
 
 	public String[] getAttributeNames() {
-		// TODO Auto-generated method stub
-		return null;
+		if (credentials instanceof SimpleCredentials) {
+			SimpleCredentials simpleCredentials = (SimpleCredentials) credentials;
+			return simpleCredentials.getAttributeNames();
+
+		}
+		return new String[] {};
 	}
 
 	public Object getAttribute(String name) {
-		// TODO Auto-generated method stub
+		if (credentials instanceof SimpleCredentials) {
+			SimpleCredentials simpleCredentials = (SimpleCredentials) credentials;
+			return simpleCredentials.getAttribute(name);
+
+		}
 		return null;
 	}
 
 	public Workspace getWorkspace() {
-		// TODO Auto-generated method stub
-		return null;
+		return new WorkspaceImpl(this, workspaceName, null, null, null, null, null, null);
 	}
 
 	public Node getRootNode() throws RepositoryException {
@@ -113,22 +141,22 @@ public class SessionImpl implements Session{
 
 	public void move(String srcAbsPath, String destAbsPath) throws ItemExistsException, PathNotFoundException, VersionException, ConstraintViolationException, LockException, RepositoryException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void removeItem(String absPath) throws VersionException, LockException, ConstraintViolationException, AccessDeniedException, RepositoryException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void save() throws AccessDeniedException, ItemExistsException, ReferentialIntegrityException, ConstraintViolationException, InvalidItemStateException, VersionException, LockException, NoSuchNodeTypeException, RepositoryException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void refresh(boolean keepChanges) throws RepositoryException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public boolean hasPendingChanges() throws RepositoryException {
@@ -148,7 +176,7 @@ public class SessionImpl implements Session{
 
 	public void checkPermission(String absPath, String actions) throws AccessControlException, RepositoryException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public boolean hasCapability(String methodName, Object target, Object[] arguments) throws RepositoryException {
@@ -163,32 +191,32 @@ public class SessionImpl implements Session{
 
 	public void importXML(String parentAbsPath, InputStream in, int uuidBehavior) throws IOException, PathNotFoundException, ItemExistsException, ConstraintViolationException, VersionException, InvalidSerializedDataException, LockException, RepositoryException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void exportSystemView(String absPath, ContentHandler contentHandler, boolean skipBinary, boolean noRecurse) throws PathNotFoundException, SAXException, RepositoryException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void exportSystemView(String absPath, OutputStream out, boolean skipBinary, boolean noRecurse) throws IOException, PathNotFoundException, RepositoryException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void exportDocumentView(String absPath, ContentHandler contentHandler, boolean skipBinary, boolean noRecurse) throws PathNotFoundException, SAXException, RepositoryException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void exportDocumentView(String absPath, OutputStream out, boolean skipBinary, boolean noRecurse) throws IOException, PathNotFoundException, RepositoryException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void setNamespacePrefix(String prefix, String uri) throws NamespaceException, RepositoryException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public String[] getNamespacePrefixes() throws RepositoryException {
@@ -208,7 +236,7 @@ public class SessionImpl implements Session{
 
 	public void logout() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public boolean isLive() {
@@ -218,7 +246,7 @@ public class SessionImpl implements Session{
 
 	public void addLockToken(String lt) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public String[] getLockTokens() {
@@ -228,7 +256,7 @@ public class SessionImpl implements Session{
 
 	public void removeLockToken(String lt) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public AccessControlManager getAccessControlManager() throws UnsupportedRepositoryOperationException, RepositoryException {
@@ -239,4 +267,5 @@ public class SessionImpl implements Session{
 	public RetentionManager getRetentionManager() throws UnsupportedRepositoryOperationException, RepositoryException {
 		// TODO Auto-generated method stub
 		return null;
-	}}
+	}
+}

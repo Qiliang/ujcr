@@ -6,7 +6,7 @@ import javax.jcr.NamespaceRegistry;
 import javax.jcr.RepositoryException;
 import javax.jcr.UnsupportedRepositoryOperationException;
 
-public class NamespaceRegistryImpl implements NamespaceRegistry{
+public class NamespaceRegistryImpl implements NamespaceRegistry {
 
 	public void registerNamespace(String prefix, String uri) throws NamespaceException, UnsupportedRepositoryOperationException, AccessDeniedException, RepositoryException {
 		// TODO Auto-generated method stub

@@ -27,6 +27,7 @@ public class EventImpl implements Event{
 		return null;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Map getInfo() throws RepositoryException {
 		// TODO Auto-generated method stub
 		return null;
